@@ -43,6 +43,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private String param, response , callbackMSG;
 	boolean appIconVisibility = true;
+	boolean appUIVisibility = true;
 
 	private IPaymentPay mWizarPayment;
 	final ServiceConnection mConnPayment = new PaymentConnection();
@@ -67,14 +68,26 @@ public class MainActivity extends Activity implements OnClickListener {
 			findViewById(id).setOnClickListener(this);
 		}
 
-		Switch sw = (Switch) findViewById(R.id.switch_icon_visible);
-		sw.setChecked(appIconVisibility);
-		sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		Switch sw_app_icon = (Switch) findViewById(R.id.switch_icon_visible);
+		sw_app_icon.setChecked(appIconVisibility);
+		sw_app_icon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				appIconVisibility = isChecked;
 			}
 		});
+
+
+		Switch sw_app_ui = (Switch) findViewById(R.id.switch_app_ui);
+		sw_app_ui.setChecked(appUIVisibility);
+		sw_app_ui.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				appUIVisibility = isChecked;
+			}
+		});
+
+
 
 		String engineName = "com.google.android.tts";
 		textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -385,6 +398,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		if(notEmptyString(transAmount))
 			jsonObject.put("TransAmount", transAmount);
+
+		jsonObject.put("ShowUI",appUIVisibility);
 	}
 
 	private void setParam4PreAuth(JSONObject jsonObject) throws JSONException {
@@ -394,6 +409,10 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		if(notEmptyString(transAmount))
 			jsonObject.put("TransAmount", transAmount);
+
+		jsonObject.put("ShowUI",appUIVisibility);
+
+
 	}
 
 	private void setparam4VoidSale(JSONObject jsonObject) throws JSONException {
@@ -402,6 +421,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		jsonObject.put("TransIndexCode", "1234561");//Third application transaction order ID，This must be not repeated
 
 		jsonObject.put("OriTraceNum",oriTrace);
+
+		jsonObject.put("ShowUI",appUIVisibility);
 	}
 
 	private void setparam4Reversal(JSONObject jsonObject) throws JSONException {
@@ -411,6 +432,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		if(notEmptyString(oriTrace))
 			jsonObject.put("OriTraceNum", oriTrace);	//This value should be same of the 'trace' in Sale response data.
+
+		jsonObject.put("ShowUI",appUIVisibility);
 	}
 
 
@@ -426,6 +449,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(notEmptyString(oriRRN))
 			jsonObject.put("OriRrn", oriRRN);	//This value should be same of the 'trace' in Sale response data.
 
+		jsonObject.put("ShowUI",appUIVisibility);
 	}
 
 
@@ -441,7 +465,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(notEmptyString(oriTrace))
 			jsonObject.put("OriTraceNum", oriTrace);	//This value should be same of the 'trace' in Sale response data.
 
-
+		jsonObject.put("ShowUI",appUIVisibility);
 	}
 
 
@@ -456,6 +480,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(notEmptyString(oriTrace))
 			jsonObject.put("OriTraceNum", oriTrace);	//This value should be same of the 'trace' in Sale response data.
 
+		jsonObject.put("ShowUI",appUIVisibility);
 	}
 
 
@@ -469,7 +494,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
 	private void setParam4setPaymentAPPParam(JSONObject jsonObject) throws JSONException {
-		jsonObject.put("AppIconVisible", appIconVisibility);
+		jsonObject.put("AppHide", !appIconVisibility);
 	}
 
 	public interface InputCallback {
@@ -516,13 +541,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			if(textToSpeech!=null)
 				textToSpeech.speak(processMsg, TextToSpeech.QUEUE_FLUSH, null, "PaymentRouterClient");
 
-
 		}
 
 	};
 
 	public PinpadCallback pinpadCallback = new PinpadCallback.Stub() {
-
 
 		@Override
 		public void processCallbackOnlinePin(int data) throws RemoteException {
