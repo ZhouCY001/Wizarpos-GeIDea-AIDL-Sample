@@ -132,8 +132,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 >
                 <Switch
+                    android:layout_weight="1"
                     android:text="Payment icon"
                     android:id="@+id/switch_icon_visible"
                     android:layout_width="wrap_content"
@@ -144,6 +153,7 @@
                     android:textSize="10sp"
                     />
                 <Switch
+                    android:layout_weight="1"
                     android:text="Payment UI"
                     android:id="@+id/switch_app_ui"
                     android:layout_width="wrap_content"
@@ -156,17 +166,13 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
                 <Button
                     android:id="@+id/setParams"
                     style="@style/btn_menu_style"
                     android:text="setParams" />
 
             </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>
